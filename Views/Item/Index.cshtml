@@ -1,0 +1,27 @@
+﻿@model List<Item>
+<div class="container">
+    <table class="table table-striped">
+    <tr>
+        <th>Id</th>
+        <th>Nom</th>
+        <th>Price</th>
+        <th>Actions</th>
+    </tr>
+        @foreach(var item in Model)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Nom</td>
+                <td>@item.Price</td>
+                <td>
+                    <form asp-action="Edit" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="number" name="id" value="@item.Id" hidden />
+                        <input type="submit" value="Update" class="btn btn-secondary" />
+                    </form>
+                    @* <a asp-action="Edit" asp-route-Id="@item.Id" class="btn btn-secondary">Update</a> *@
+                </td>
+            </tr>
+        }
+    </table>
+</div>
