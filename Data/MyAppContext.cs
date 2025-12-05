@@ -22,8 +22,12 @@ namespace learn_entity_framework.Data
 
         // N.B : DbContext in EN meen the database, and DbSet in EN meen the table
         // N.B : To migrate the database you must, run thos 2 commandes : 
-        // 1) Add-Migration "name of migration"
-        // 2) Update-Database
+        // To create a database :
+        // 1) Go to view/server explorer 
+        // 2) Create new sql server
+        // 3) Enter the server name, and choise the type of auth and the name of database
+        // 4) Add-Migration "name of migration"
+        // 5) Update-Database
 
         // N.B : In database approache the models and the DbContext are generated auto
     }

@@ -18,7 +18,8 @@ namespace learn_entity_framework.Controllers
         // Ici on a travailler avec une fonction asynchrone, car cette requete peut prendre du temps si il ya 
         // plusieurs ligne dans la table, si on ne fait pas asynchrone function ici, il va bloquer touts les autres 
         // requets jusqu'a que ceci termine, et ca c'est mauvais pour la performance et le user experience 
-        // N.B : Une fonction async return un Task<type>
+        // N.B : Une fonction async return un Task<type>, et Task veut dire un Promise() dans js => je te promis
+        // de returner un resultat plus tard 
         // On utilise le mot async pour definir que cette methode est async
         public async Task<IActionResult> Index()
         {
