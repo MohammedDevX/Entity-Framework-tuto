@@ -14,12 +14,8 @@
                 <td>@item.Nom</td>
                 <td>@item.Price</td>
                 <td>
-                    <form asp-action="Edit" method="post">
-                        @Html.AntiForgeryToken()
-                        <input type="number" name="id" value="@item.Id" hidden />
-                        <input type="submit" value="Update" class="btn btn-secondary" />
-                    </form>
-                    @* <a asp-action="Edit" asp-route-Id="@item.Id" class="btn btn-secondary">Update</a> *@
+                    <a asp-action="Edit" asp-route-Id="@item.Id" class="btn btn-secondary">Update</a>
+                    <a asp-action="Delete" asp-route-Id="@item.Id" class="btn btn-danger">Delete</a>
                 </td>
             </tr>
         }

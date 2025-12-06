@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using learn_entity_framework.Models;
+using learn_entity_framework.ViewModels;
+using learn_entity_framework.Mapper;
 
 namespace learn_entity_framework.Controllers
 {
@@ -26,7 +28,7 @@ namespace learn_entity_framework.Controllers
             // 1) Ici on mait le mot await pour cette ligne ca veut dire que n'execute pas la requete jusqu'a que cette 
             // ligne et terminer de la recuperation, dans un autre sense, il veut dire attendre moi
             // 2) Pour recuperer les donner on utilise la method ToList(), on ajouton Async dans ce cas
-            var data = await context.Items.ToListAsync();
+            List<Item> data = await context.Items.ToListAsync();
 
             // Ici on peut utiliser plusieurs methodes pour communiquer avec le View, la bonne c'est passer 
             // l'objet dans le view, et le recuperer avec @model List<type d'objet> et travailler avec le var Model
@@ -37,12 +39,76 @@ namespace learn_entity_framework.Controllers
             // consommation api, recuperation donnes dans une base de donne 
         }
 
-        [ValidateAntiForgeryToken]
+        [HttpGet]
+        [Route("create")]
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Store(ItemVM itemvm)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(nameof(Create));
+            }
+
+            Item item = ItemMP.AffectItemVMToItem(itemvm);
+            context.Items.Add(item);
+            await context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+
+        //[ValidateAntiForgeryToken]
+        [HttpGet]
         [Route("edit")]
         public IActionResult Edit(int id)
         {
-            ViewBag.id = id;
+            Item item = context.Items.Find(id);
+            if (item == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            ViewBag.item = item;
             return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Update(int id, ItemVM itemvm)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(nameof(Edit));
+            }
+
+            // 1) Using Update to update the data, but pay att if the item in the mappage doesent affect the id to the
+            // item
+            Item item = ItemMP.AffectItemVMToItem(itemvm, id);
+            context.Items.Update(item);
+
+            // 2) Or find the ligne who contain the similar id, and change every attribut
+            //Item itemdb = context.Items.Find(id);
+            //itemdb.Nom = item.Nom;
+            //itemdb.Price = item.Price;
+
+            await context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            Item item = context.Items.Find(id);
+            if (item == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            context.Items.Remove(item);
+            await context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
     }
 }
