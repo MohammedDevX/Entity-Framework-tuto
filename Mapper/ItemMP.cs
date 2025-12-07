@@ -10,6 +10,7 @@ namespace learn_entity_framework.Mapper
             Item item = new Item();
             item.Nom = itemvm.Nom;
             item.Price = itemvm.Price;
+            item.CategoryId = itemvm.Category;
             return item;
         }
 
@@ -19,6 +20,7 @@ namespace learn_entity_framework.Mapper
             item.Id = id;
             item.Nom = itemvm.Nom;
             item.Price = itemvm.Price;
+            item.CategoryId = itemvm.Category;
             return item;
         }
     }

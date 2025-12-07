@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using learn_entity_framework.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace learn_entity_framework.ViewModels
 {
@@ -9,5 +10,8 @@ namespace learn_entity_framework.ViewModels
 
         [Required(ErrorMessage = "The price is required")]
         public double Price { get; set; }
+
+        [Required(ErrorMessage = "The category is required")]
+        public int Category { get; set; }
     }
 }

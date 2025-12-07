@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using learn_entity_framework.Data;
 
@@ -10,9 +11,11 @@ using learn_entity_framework.Data;
 namespace learn_entity_framework.Migrations
 {
     [DbContext(typeof(MyAppContext))]
-    partial class MyAppContextModelSnapshot : ModelSnapshot
+    [Migration("20251207000912_New")]
+    partial class New
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -20,35 +23,6 @@ namespace learn_entity_framework.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("learn_entity_framework.Models.Category", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Category");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Electronique"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "clothes"
-                        });
-                });
 
             modelBuilder.Entity("learn_entity_framework.Models.Item", b =>
                 {
@@ -58,9 +32,6 @@ namespace learn_entity_framework.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CategoryId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Nom")
                         .HasColumnType("nvarchar(max)");
 
@@ -68,10 +39,6 @@ namespace learn_entity_framework.Migrations
                         .HasColumnType("float");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CategoryId")
-                        .IsUnique()
-                        .HasFilter("[CategoryId] IS NOT NULL");
 
                     b.ToTable("Items");
 
@@ -115,15 +82,6 @@ namespace learn_entity_framework.Migrations
                         });
                 });
 
-            modelBuilder.Entity("learn_entity_framework.Models.Item", b =>
-                {
-                    b.HasOne("learn_entity_framework.Models.Category", "Category")
-                        .WithOne("Item")
-                        .HasForeignKey("learn_entity_framework.Models.Item", "CategoryId");
-
-                    b.Navigation("Category");
-                });
-
             modelBuilder.Entity("learn_entity_framework.Models.SerialNumber", b =>
                 {
                     b.HasOne("learn_entity_framework.Models.Item", "Item")
@@ -132,11 +90,6 @@ namespace learn_entity_framework.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Item");
-                });
-
-            modelBuilder.Entity("learn_entity_framework.Models.Category", b =>
-                {
                     b.Navigation("Item");
                 });
 

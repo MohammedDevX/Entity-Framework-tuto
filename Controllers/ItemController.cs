@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using learn_entity_framework.Models;
 using learn_entity_framework.ViewModels;
 using learn_entity_framework.Mapper;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace learn_entity_framework.Controllers
 {
@@ -28,7 +29,8 @@ namespace learn_entity_framework.Controllers
             // 1) Ici on mait le mot await pour cette ligne ca veut dire que n'execute pas la requete jusqu'a que cette 
             // ligne et terminer de la recuperation, dans un autre sense, il veut dire attendre moi
             // 2) Pour recuperer les donner on utilise la method ToList(), on ajouton Async dans ce cas
-            List<Item> data = await context.Items.ToListAsync();
+            List<Item> data = await context.Items.Include(s => s.SerialNumber)
+                                                 .Include(s => s.Category).ToListAsync();
 
             // Ici on peut utiliser plusieurs methodes pour communiquer avec le View, la bonne c'est passer 
             // l'objet dans le view, et le recuperer avec @model List<type d'objet> et travailler avec le var Model
@@ -37,12 +39,20 @@ namespace learn_entity_framework.Controllers
             return View(data);
             // N.B : Generalement on utilise les mehtodes async quand il ya une requete qui va prendre du temps ex : 
             // consommation api, recuperation donnes dans une base de donne 
+            // N.B : Utilise await quand la methode qui fait le traitement peut terminer avec Async, ex : ToListAsync
         }
 
         [HttpGet]
         [Route("create")]
         public IActionResult Create()
         {
+            // To display all categories, there is 2 methods : 
+            // 1) 
+            //List<Category> category = await context.Category.ToListAsync();
+            //ViewBag.category = category;
+
+            // 2) Doesnt need to made foreach in razor 
+            ViewData["category"] = new SelectList(context.Category, "Id", "Name");
             return View();
         }
 
@@ -72,6 +82,7 @@ namespace learn_entity_framework.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
+            ViewData["category"] = new SelectList(context.Category, "Id", "Name", item.CategoryId);
             ViewBag.item = item;
             return View();
         }
