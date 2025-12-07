@@ -30,7 +30,9 @@ namespace learn_entity_framework.Controllers
             // ligne et terminer de la recuperation, dans un autre sense, il veut dire attendre moi
             // 2) Pour recuperer les donner on utilise la method ToList(), on ajouton Async dans ce cas
             List<Item> data = await context.Items.Include(s => s.SerialNumber)
-                                                 .Include(s => s.Category).ToListAsync();
+                                                 .Include(s => s.Category)
+                                                 .Include(ci => ci.ClientItem)
+                                                 .ThenInclude(c => c.Client).ToListAsync();
 
             // Ici on peut utiliser plusieurs methodes pour communiquer avec le View, la bonne c'est passer 
             // l'objet dans le view, et le recuperer avec @model List<type d'objet> et travailler avec le var Model
@@ -61,7 +63,11 @@ namespace learn_entity_framework.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(nameof(Create));
+                // Here if the ModelState id not valid, hes going to dsplay the Create view to display errors, but 
+                // the probleme is that the List of Category doesnt exist in the Store action, so we are going 
+                // to List the categories if the the ModelState is not valid
+                ViewData["category"] = new SelectList(context.Category, "Id", "Name");
+                return View("Create");
             }
 
             Item item = ItemMP.AffectItemVMToItem(itemvm);
@@ -92,6 +98,7 @@ namespace learn_entity_framework.Controllers
         {
             if (!ModelState.IsValid)
             {
+                ViewData["category"] = new SelectList(context.Category, "Id", "Name");
                 return View(nameof(Edit));
             }
 

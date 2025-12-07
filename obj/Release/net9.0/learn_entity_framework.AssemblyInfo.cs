@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("learn_entity_framework")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+80b436f150d85115acfd2817f1fdb4dcd5545123")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fe048eaf247d5643a32fd989b5740252d5bef47a")]
 [assembly: System.Reflection.AssemblyProductAttribute("learn_entity_framework")]
 [assembly: System.Reflection.AssemblyTitleAttribute("learn_entity_framework")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

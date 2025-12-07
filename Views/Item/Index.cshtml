@@ -5,8 +5,9 @@
         <th>Id</th>
         <th>Nom</th>
         <th>Price</th>
-            <th>Serial number</th>
-            <th>Category</th>
+        <th>Serial number</th>
+        <th>Category</th>
+        <th>Clients</th>
         <th>Actions</th>
     </tr>
         @foreach(var item in Model)
@@ -17,6 +18,12 @@
                 <td>@item.Price</td>
                 <td>@item.SerialNumber?.Name</td>
                 <td>@item.Category?.Name</td>
+                <td>
+                    @foreach (var clients in item.ClientItem)
+                    {
+                        @clients.Client.Name <span> | </span>
+                    }
+                </td>
                 <td>
                     <a asp-action="Edit" asp-route-Id="@item.Id" class="btn btn-secondary">Update</a>
                     <a asp-action="Delete" asp-route-Id="@item.Id" class="btn btn-danger">Delete</a>

@@ -22,6 +22,8 @@ namespace learn_entity_framework.Data
         public DbSet<Item> Items { get; set; }
         public DbSet<SerialNumber> SerialNumbers { get; set; }
         public DbSet<Category> Category { get; set; }
+        public DbSet<Client> Client { get; set; }
+        public DbSet<ClientItem> ClientItem { get; set; }
 
         // N.B : DbContext in EN meen the database, and DbSet in EN meen the table
         // N.B : To migrate the database you must, run thos 2 commandes : 
@@ -37,6 +39,14 @@ namespace learn_entity_framework.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<ClientItem>().HasKey(pk => new { pk.ItemId, pk.ClientId });
+
+            // Each ClientItem has one Item, and each Item can have many ClientItems (one-to-many relationship)
+            modelBuilder.Entity<ClientItem>().HasOne(i => i.Item).WithMany(ci => ci.ClientItem).HasForeignKey(i => i.ItemId);
+
+            modelBuilder.Entity<ClientItem>().HasOne(c => c.Client).WithMany(ci => ci.ClientItem).HasForeignKey(c => c.ClientId);
+
             modelBuilder.Entity<Item>().HasData(
                 new Item { Id = 1, Nom = "Keyboard", Price = 150 }
             );
